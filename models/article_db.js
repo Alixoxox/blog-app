@@ -1,6 +1,13 @@
 const mysql = require("mysql2");
 require("dotenv").config()
-const mysqlDB = mysql.createConnection(process.env.DATABASE_URL);
+
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) {
+  console.error('❌ DATABASE_URL is not set!');
+  process.exit(1); // Stop the server
+}
+ 
+const mysqlDB= mysql.createConnection(process.env.DATABASE_URL);
 
 mysqlDB.connect((err) => {
     if (err) {
