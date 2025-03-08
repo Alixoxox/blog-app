@@ -1,0 +1,25 @@
+<div class="form-group p-2">
+  <form action="/articles" method="POST" style="font-family: Roboto,Ubuntu;">
+  <label for="title">Title</label>
+  <input
+    required
+    type="text"
+    class="form-control p-2"
+    name="title"
+    id="title"
+    placeholder= "<%= article.title || 'Enter Title..' %>"
+  />
+</div>
+<div class="form-group p-2">
+<label for="description">Description</label>
+<textarea class="form-control p-2" name="description" id="description"><%=article.description %></textarea></div>
+<div class="form-group p-2">
+  <label for="markdown">markdown</label>
+  <textarea class="form-control p-2" name="markdown" id="markdown"><%=article.markdown %></textarea>
+</div>
+
+<div class="d-flex gap-2 mt-3">
+  <a href="/" class="btn btn-secondary">Cancel</a>
+  <button type="submit" class="btn btn-success">Submit</button>
+</div>
+</form>
