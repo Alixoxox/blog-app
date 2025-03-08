@@ -1,13 +1,7 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
-
-const mysqlDB = mysql.createConnection({
-    host: "tramway.proxy.rlwy.net",
-    user: "root",  // Change this to "scott" if you're using that user
-    password: "Tiger", // Replace with your MySQL password
-    database: "blog_app", // Make sure this database exists
-    port: 3306,  // Default MySQL port, update if needed
-});
+require("dotenv").config()
+const mysqlDB = mysql.createConnection(process.env.DATABASE_URL);
 
 mysqlDB.connect((err) => {
     if (err) {
