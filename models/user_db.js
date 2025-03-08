@@ -1,7 +1,12 @@
-const mysql = require("mysql2");
+const mysql = require("mysql");
 
-require("dotenv").config()
-const mysqlDB = mysql.createConnection(process.env.DATABASE_URL);
+const mysqlDB = mysql.createConnection({
+  host: 'sql303.infinityfree.com',  // Your MySQL Hostname
+  user: 'if0_38475898',             // Your MySQL Username
+  password: 'Karachi9641s',         // Your MySQL Password (Change it!)
+  database: 'if0_38475898_blog_app',     // Your Database Name
+  port: 3306,                       // MySQL Port (Default: 3306)
+});
 
 mysqlDB.connect((err) => {
     if (err) {

@@ -1,19 +1,20 @@
-const mysql = require("mysql2");
-require("dotenv").config()
+const mysql = require("mysql");
 
-const dbUrl = process.env.DATABASE_URL;
-if (!dbUrl) {
-  console.error('❌ DATABASE_URL is not set!');
-  process.exit(1); // Stop the server
-}
- 
-const mysqlDB= mysql.createConnection(process.env.DATABASE_URL);
+const mysqlDB = mysql.createConnection({
+  host: 'sql303.infinityfree.com',  // Your MySQL Hostname
+  user: 'if0_38475898',             // Your MySQL Username
+  password: 'Karachi9641s',         // Your MySQL Password (Change it!)
+  database: 'if0_38475898_blog_app',     // Your Database Name
+  port: 3306,                       // MySQL Port (Default: 3306)
+});
 
 mysqlDB.connect((err) => {
     if (err) {
         console.error("❌ MySQL Connection Error:", err);
         return;
-    }
+    }else {
+      console.log('Connected to MySQL');
+  }
     
 });
 const Table_creation=`CREATE TABLE articles (
