@@ -2,7 +2,7 @@ const mysql = require("mysql");
 
 
 const mysqlDB = mysql.createConnection({
-    host: "localhost",
+    host: "tramway.proxy.rlwy.net",
     user: "root",  // Change this to "scott" if you're using that user
     password: "Tiger", // Replace with your MySQL password
     database: "blog_app", // Make sure this database exists
