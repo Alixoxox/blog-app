@@ -1,10 +1,10 @@
 const mysql = require("mysql");
 
 const mysqlDB = mysql.createConnection({
-  host: 'sql303.infinityfree.com',  // Your MySQL Hostname
-  user: 'if0_38475898',             // Your MySQL Username
-  password: 'Karachi9641s',         // Your MySQL Password (Change it!)
-  database: 'if0_38475898_blog_app',     // Your Database Name
+  host: 'localhost',  // Your MySQL Hostname
+  user: 'root',             // Your MySQL Username
+  password: 'Tiger',         // Your MySQL Password (Change it!)
+  database: 'blog_app',     // Your Database Name
   port: 3306,                       // MySQL Port (Default: 3306)
 });
 
