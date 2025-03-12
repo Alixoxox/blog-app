@@ -1,5 +1,5 @@
 <div class="form-group p-2">
-  <form action="/articles" method="POST" style="font-family: Roboto,Ubuntu;">
+  <form action="/articles" method="POST" style="font-family: Roboto,Ubuntu;"enctype="multipart/form-data">
   <label for="title">Title</label>
   <input
     required
@@ -14,10 +14,14 @@
 <label for="description">Description</label>
 <textarea class="form-control p-2" name="description" id="description"><%=article.description %></textarea></div>
 <div class="form-group p-2">
-  <label for="markdown">markdown</label>
+  <label for="markdown">Markdown / Main Postulates</label>
   <textarea class="form-control p-2" name="markdown" id="markdown"><%=article.markdown %></textarea>
+  <label for="markdown">[Hint: Write in it likeyou would in a Readme file]</label>
 </div>
-
+<div class="form-group">
+  <label for="fileUpload">Choose a Cover file:</label>
+  <input type="file" class="ms-2" name="cover_img" accept="image/*">
+</div>
 <div class="d-flex gap-2 mt-3">
   <a href="/" class="btn btn-secondary">Cancel</a>
   <button type="submit" class="btn btn-success">Submit</button>

@@ -1,26 +1,21 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" style="font-family: Roboto,Ubuntu;">
   <div class="container-fluid mx-2">
-    <a class="navbar-brand fw-bold" href="/">DevTalks</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <a class="navbar-brand fw-bold" href="/">DevTalks<img
+        src="https://img.icons8.com/?size=100&id=64517&format=png&color=000000" alt="pen" style="height: 55px;"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active fw-bold" aria-current="page" href="../"
-            >About</a
-          >
+          <a class="nav-link active fw-bold" aria-current="page" href="../">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
         </li>
       </ul>
 
@@ -29,11 +24,7 @@
         <div class="col-12">
           <!-- Increased width -->
           <form action="/articles/search" method="GET" class="d-flex">
-            <input
-              type="text"
-              name="q"
-              placeholder="Search DevTalks"
-              style="margin-top:4px;
+            <input type="text" name="q" placeholder="Search DevTalks" style="margin-top:4px;
                 padding: 7px;
                 border: 2px solid #ccc;
                 border-right: none;
@@ -44,11 +35,8 @@
                 flex-grow: 1; /* Expands as space is freed */
                 border-radius: 50px 0 0 50px;
                 box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
-              "
-            />
-            <button
-              type="submit"
-              style="margin-top: 4px;
+              " />
+            <button type="submit" style="margin-top: 4px;
                 padding: 7px 20px;
                 border: none;
                 background-color: #303434;
@@ -56,28 +44,26 @@
                 font-size: 16px;
                 cursor: pointer;
                 border-radius: 0 50px 50px 0;
-              "
-            >
+              ">
               Search
             </button>
           </form>
         </div>
       </div>
-     <div class=" mt-md-2 text-left">
-          <a href="/account/user"  id="Acc" class="bg-body-tertiary outline"
-            style="
-              padding: 9px 15px;
-              color: white;
-              font-size: 16px;
-              cursor: pointer;
-              text-decoration: none;
-              display: inline-block;
-              margin-bottom: 2px;
-            ">
-            Account
-          </a>
-        </div>
+      <div class=" mt-md-2 text-left">
+        <a href="/account/user" id="Acco" class="bg-body-tertiary outline" style="
+  padding: 9px 15px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;  /* Use inline-flex to align the image and text */
+  align-items: center;   /* Vertically align the image and text */
+  margin-bottom: 2px;
+">
+  Account
+</a>
+      </div>
     </div>
   </div>
 </nav>
-

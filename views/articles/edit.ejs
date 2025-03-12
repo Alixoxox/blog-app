@@ -15,8 +15,8 @@
 
 
     <%-include('nav_bar') %>
-    <div class="container mt-4 "><h1 class="text-decoration-underline mb-4">Edit Contents</h1>
-        <form action="/articles/<%=article.slug%>?_method=PUT" method="POST">
+    <div class="container mt-4 "><h1 class="fw-bold mb-4">Edit Contents</h1>
+        <form action="/articles/<%=article.slug%>?_method=PUT" method="POST" enctype="multipart/form-data">
             <div class="form-group p-2"></div>
             <label for="title">Title</label>
             <input
@@ -31,9 +31,15 @@
           <label for="description">Description</label>
           <textarea class="form-control p-2 " style="min-height:47vh" name="description" id="description"><%=article.description %></textarea></div>
           <div class="form-group mt-3 ">
-            <label for="markdown">markdown</label>
+            <label for="markdown">Markdown / Main Postulates</label>
             <textarea class="form-control p-2" name="markdown" id="markdown"><%=article.markdown %></textarea>
+            <label for="markdown">[Hint: Write in it likeyou would in a Readme file]</label>
           </div>
+          <div class="form-group mt-4">
+            <label for="fileUpload">Choose a Cover file:</label>
+            <input type="file" class="ms-2" name="cover_img" accept="image/*">
+        </div>
+
           
           <div class="d-flex gap-2 mt-3">
             <a href="/" class="btn btn-secondary">Cancel</a>

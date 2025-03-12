@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const user_db = require("../models/user_db");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+const path = require("path");
 
 // Protect the "/users" root route
 router.get("/login", (req, res) => {
@@ -24,7 +26,7 @@ router.get("/user", async (req, res) => {
           error: "Please Signup/Login First to view Account",
         }); // Handle case when user is not found
       } else {
-        return res.render("users/userP", { user: result[0], error: null });
+        return res.render("users/account_p", { user: result[0], error: null });
       }
     });
   } else {
@@ -41,14 +43,14 @@ router.post("/signup", async (req, res) => {
   if (!username || !password || !fname || !email) {
     return res.render("users/signup", { error: "Enter All Required Fields" });
   }
-
+  
   // Check password length
   if (password.length < 8) {
     return res.render("users/signup", {
       error: "Password must be greater than 8 characters",
     });
   }
-
+  
   try {
     // Check if the username already exists
     const users_sql = "SELECT username FROM users WHERE username=?";
@@ -59,19 +61,19 @@ router.post("/signup", async (req, res) => {
           error: "Database error. Try again later.",
         });
       }
-
+      
       if (result.length > 0) {
         return res.render("users/signup", {
           error: "Username already exists in the database.",
         });
       }
-
+      
       // Hash the password correctly
       const passwordHash = await bcrypt.hash(password, 10);
-
+      
       // Insert the new user into the database
       const data_push =
-        "INSERT INTO users (fname, lname, username, email, password) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO users (fname, lname, username, email, password) VALUES (?, ?, ?, ?, ?)";
       user_db.query(
         data_push,
         [fname, lname, username, email, passwordHash],
@@ -96,48 +98,115 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
-
-router.post("/update", async (req, res) => {
-  const { fname, lname, username, email, password } = req.body;
-
-  if (!username || !password || !fname || !lname || !email) {
-    return res.render("account/user", {
-      error: "Enter All Fields",
-      user: null,
-    });
+router.get('/update', (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+    console.log(" No session user found");
+    return res.status(403).send("Unauthorized - No session user found");
   }
-  if (password.length < 8) {
-    return res.render("users/signup", {
-      error: "Password must be greater than 8 characters",
-    });
-  }
-  const passwordHash = await bcrypt.hash(password, 10);
 
-  const old_username = req.session.user.username || "."; // ✅ Fixed typo: `usename` → `username`
-
-  const sql =
-    "UPDATE users SET username = ?, email = ?, fname = ?, lname = ?, password = ? WHERE username = ?;";
-
-  user_db.query(
-    sql,
-    [username, email, fname, lname, passwordHash, old_username],
-    (err, result) => {
+  const sql = "SELECT * FROM users WHERE username = ?";
+  user_db.query(sql, [req.session.user.username], (err, result) => {
       if (err) {
-        console.error("Error updating user:", err);
-        return res.render("account/user", {
-          error: "Something went wrong. Please enter a unique Username.",
-          user: req.session.user,
-        });
+        console.error(" Error retrieving user data:", err);
+        return res.status(500).send("Internal Server Error");
       }
+      
+      if (result.length === 0) {
+        console.log("  User not found in DB");
+        return res.status(404).send("User not found");
+      }
+      
 
-      console.log("✅ User updated successfully!");
-
-      // Update session with new user info
-      req.session.user.username = username;
-      res.redirect("../");
+      try {
+          return res.render("users/update_p", { user: result[0], error: null });
+        } catch (e) {
+          console.error("Error rendering template:", e);
+          return res.status(500).send("Error rendering page");
+      }
+    });
+  });
+  
+  // Set up storage engine
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "public/uploads/"); // Save files in "public/uploads"
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.session.user.username + path.extname(file.originalname)); // Use username as filename
     }
-  );
-});
+  });
+  // Initialize Multer
+  const upload = multer({
+    storage: storage,
+    
+    limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
+  });
+  
+  router.post("/update", upload.single("profile_pic"), async (req, res) => {
+    const { fname, lname, username, email, password } = req.body;
+    let profilePic = `/uploads/${req.file.filename}` ;
+  
+    if (!username || !password || !fname || !lname || !email) {
+      return res.render("users/account_p", {
+        error: "Enter All Fields",
+        user: null,
+      });
+    }
+  
+    if (password.length < 8) {
+      return res.render("users/signup", {
+        error: "Password must be greater than 8 characters",
+      });
+    }
+  
+    const passwordHash = await bcrypt.hash(password, 10);
+  
+    const old_username = req.session.user.username || "."; //    Fixed typo: `usename` → `username`
+  
+    const userSql =
+      "UPDATE users SET username = ?, email = ?, fname = ?, lname = ?, password = ?, profile_pic = ? WHERE username = ?;";
+  
+    user_db.query(
+      userSql,
+      [username, email, fname, lname, passwordHash, profilePic, old_username],
+      (err, result) => {
+        if (err) {
+          console.error("Error updating user:", err);
+          return res.render("users/account_p", {
+            error: "Something went wrong. Please enter a unique Username.",
+            user: req.session.user,
+          });
+        }
+  
+        console.log(" User updated successfully!");
+  
+       
+        const articleSql =
+          "UPDATE articles SET created_by = ? WHERE created_by = ?;";
+  
+        user_db.query(
+          articleSql,
+          [username, old_username], // Update `created_by` to new username where old username is used
+          (err, result) => {
+            if (err) {
+              console.error("Error updating articles:", err);
+              return res.render("users/account_p", {
+                error: "Something went wrong while updating articles.",
+                user: req.session.user,
+              });
+            }
+  
+            console.log(" Articles updated successfully!");
+  
+            // Update session with new user info
+            req.session.user.username = username;
+            res.redirect("/account/user");
+          }
+        );
+      }
+    );
+  });
+  
 
 router.post("/login", async (req, res) => {
   console.log("Before login:", req.session);
